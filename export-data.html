@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Nexus - Inspecta Store Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00f7ff;
+      --primary-dark: #00c2ff;
+      --secondary: #6e00ff;
+      --background: #0a0a15;
+      --card-bg: rgba(20, 20, 40, 0.7);
+      --text: #ffffff;
+      --text-light: #b8c2d9;
+      --border: rgba(0, 247, 255, 0.2);
+      --success: #00ff9d;
+      --warning: #ffcc00;
+      --danger: #ff2d75;
+      --glow: 0 0 15px rgba(0, 247, 255, 0.5);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(110, 0, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 20%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
+    }
+    
+    .logo-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 25px 0;
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .logo {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 247, 255, 0.7));
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 1px;
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+      text-decoration: none;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+      align-self: flex-start;
+    }
+    
+    .back-link:hover {
+      color: var(--primary);
+      text-shadow: var(--glow);
+    }
+    
+    .export-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), var(--glow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .export-panel::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(0, 247, 255, 0) 0%,
+        rgba(0, 247, 255, 0.1) 50%,
+        rgba(0, 247, 255, 0) 100%
+      );
+      transform: rotate(30deg);
+      animation: shine 6s infinite linear;
+    }
+    
+    @keyframes shine {
+      0% { transform: rotate(30deg) translate(-30%, -30%); }
+      100% { transform: rotate(30deg) translate(30%, 30%); }
+    }
+    
+    .export-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      color: var(--primary);
+      margin-bottom: 30px;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .export-title i {
+      font-size: 24px;
+    }
+    
+    .export-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .export-btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      border-radius: 8px;
+      padding: 16px 25px;
+      color: var(--background);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0, 247, 255, 0.3);
+    }
+    
+    .export-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 247, 255, 0.5);
+    }
+    
+    .export-btn i {
+      font-size: 20px;
+    }
+    
+    /* Particles background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .particle {
+      position: absolute;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: float linear infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+      .logo-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+      
+      .logo {
+        height: 50px;
+      }
+      
+      .export-panel {
+        padding: 30px 20px;
+      }
+      
+      .export-buttons {
+        gap: 15px;
+      }
+      
+      .export-btn {
+        padding: 14px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating particles background -->
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <div class="logo-header">
+      <img src="images/logo2.jpg" alt="Inspecta Logo" class="logo">
+      <h1>INSPECTA STORE MANAGER</h1>
+    </div>
+    
+    <a href="index.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="export-panel">
+      <h2 class="export-title"><i class="fas fa-database"></i> DATA NEXUS</h2>
+      <div class="export-buttons">
+        <button class="export-btn" onclick="exportData()">
+          <i class="fas fa-file-csv"></i> Export Inventory Matrix
+        </button>
+        <button class="export-btn" onclick="exportToolHistory()">
+          <i class="fas fa-history"></i> Export Asset History
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Create floating particles
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 30;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 5 + 2;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `-${delay}s`;
+        
+        // Random color variation
+        const hue = 180 + Math.random() * 40 - 20;
+        particle.style.background = `hsl(${hue}, 100%, 70%)`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+  </script>
+  
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool Assignment - Inspecta Store Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00f7ff;
+      --primary-dark: #00c2ff;
+      --secondary: #6e00ff;
+      --background: #0a0a15;
+      --card-bg: #141428;
+      --text: #ffffff;
+      --text-light: #b8c2d9;
+      --border: #2a2a4a;
+      --success: #00ff9d;
+      --danger: #ff2d75;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .logo-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 0;
+    }
+    
+    .logo {
+      height: 50px;
+      width: auto;
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    #multiAssignForm {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      color: var(--primary);
+      margin: 15px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    h2 i {
+      font-size: 16px;
+    }
+    
+    .form-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-light);
+      font-size: 13px;
+    }
+    
+    input, select {
+      background: rgba(10, 10, 25, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      color: var(--text);
+      width: 100%;
+      font-size: 14px;
+    }
+    
+    .form-container {
+      margin-bottom: 15px;
+    }
+    
+    .tool-entry-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    
+    @media (max-width: 768px) {
+      .tool-entry-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .suggestions-container {
+      position: relative;
+    }
+    
+    #toolSuggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: #1e1e3a;
+      border: 1px solid var(--primary);
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+    
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .suggestion-item:hover {
+      background: rgba(0, 247, 255, 0.1);
+    }
+    
+    .suggestion-item .tool-name {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 14px;
+    }
+    
+    .primary-btn {
+      background: var(--primary);
+      border: none;
+      border-radius: 6px;
+      padding: 10px 15px;
+      color: #0a0a15;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    #assignedToolsList {
+      margin: 20px 0;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    
+    th {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--primary);
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      margin: 0 5px;
+    }
+    
+    .action-btn.remove:hover {
+      color: var(--danger);
+    }
+    
+    .save-btn {
+      background: var(--success);
+      width: 100%;
+      max-width: 250px;
+      margin: 20px auto 0;
+      padding: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-header">
+      <img src="images/logo2.jpg" alt="Inspecta Logo" class="logo">
+      <h1>INSPECTA STORE MANAGER</h1>
+    </div>
+    
+    <a href="index.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <form id="multiAssignForm">
+      <h2><i class="fas fa-users-cog"></i> Assignment Details</h2>
+      
+      <div class="form-group">
+        <div>
+          <label for="technicianName">Technician Name</label>
+          <input type="text" id="technicianName" placeholder="Enter technician name" required>
+        </div>
+        
+        <div>
+          <label for="siteName">Site Name</label>
+          <input type="text" id="siteName" placeholder="Enter site name" required>
+        </div>
+        
+        <div>
+          <label for="destination">Destination</label>
+          <input type="text" id="destination" placeholder="Enter destination" required>
+        </div>
+        
+        <div>
+          <label for="issueDate">Issue Date</label>
+          <input type="date" id="issueDate" required >
+        </div>
+        
+        <div>
+          <label for="siteIncharge">Site Incharge</label>
+          <input type="text" id="siteIncharge" placeholder="Enter site incharge name" required>
+        </div>
+      </div>
+
+      <h2><i class="fas fa-tools"></i> Tools to Assign</h2>
+      
+      <div class="form-container">
+        <div class="tool-entry-grid">
+          <div class="suggestions-container">
+            <input type="text" id="toolName" placeholder="Search tool name" oninput="showToolSuggestions()">
+            <div id="toolSuggestions" class="suggestions"></div>
+          </div>
+          <input type="text" id="toolSerial" placeholder="Serial" readonly>
+          <input type="number" id="toolQuantity" placeholder="Qty" min="1" value="1">
+          <button type="button" class="primary-btn" onclick="addToolToList()">
+            <i class="fas fa-plus-circle"></i> Add
+          </button>
+        </div>
+      </div>
+
+      <div id="assignedToolsList">
+        <h3>Selected Tools</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Tool Name</th>
+              <th>Serial</th>
+              <th>Quantity</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="assignedToolsTable">
+            <!-- Tools will be added here dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <button type="submit" class="save-btn primary-btn">
+        <i class="fas fa-save"></i> Save & Print
+      </button>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

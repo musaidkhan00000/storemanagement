@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Asset Tracker - Inspecta Store Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00f7ff;
+      --primary-dark: #00c2ff;
+      --secondary: #6e00ff;
+      --background: #0a0a15;
+      --card-bg: rgba(20, 20, 40, 0.7);
+      --text: #ffffff;
+      --text-light: #b8c2d9;
+      --border: rgba(0, 247, 255, 0.2);
+      --success: #00ff9d;
+      --warning: #ffcc00;
+      --danger: #ff2d75;
+      --glow: 0 0 15px rgba(0, 247, 255, 0.5);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(110, 0, 255, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(0, 247, 255, 0.1) 0%, transparent 20%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 30px 50px;
+    }
+    
+    .logo-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 25px 0;
+    }
+    
+    .logo {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(0, 247, 255, 0.7));
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: 1px;
+      margin: 0;
+      text-shadow: 0 0 10px rgba(0, 247, 255, 0.3);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+      text-decoration: none;
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: var(--primary);
+      text-shadow: var(--glow);
+    }
+    
+    #toolForm {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    
+    #toolForm input, 
+    #toolForm select {
+      background: rgba(10, 10, 25, 0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 15px;
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    #toolForm input:focus, 
+    #toolForm select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: var(--glow);
+    }
+    
+    #toolForm input::placeholder {
+      color: var(--text-light);
+      opacity: 0.7;
+    }
+    
+    #toolForm button {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      color: var(--background);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      grid-column: 1 / -1;
+    }
+    
+    #toolForm button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--glow);
+    }
+    
+    .suggestions {
+      position: absolute;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: calc(100% - 40px);
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .suggestion-item {
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .suggestion-item:hover {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--primary);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    th, td {
+      padding: 15px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    th {
+      background: rgba(0, 247, 255, 0.1);
+      font-weight: 600;
+      color: var(--primary);
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-size: 14px;
+    }
+    
+    tr:hover {
+      background: rgba(0, 247, 255, 0.05);
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    
+    .status.assigned {
+      background: rgba(0, 255, 157, 0.1);
+      color: var(--success);
+    }
+    
+    .status.overdue {
+      background: rgba(239, 35, 60, 0.1);
+      color: var(--danger);
+    }
+    
+    .status.returned {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--primary);
+    }
+    
+    .action-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      margin: 0 5px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .action-btn.return:hover {
+      color: var(--primary);
+      text-shadow: var(--glow);
+    }
+    
+    .action-btn.delete:hover {
+      color: var(--danger);
+      text-shadow: 0 0 10px rgba(239, 35, 60, 0.5);
+    }
+    
+    /* Particles background */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .particle {
+      position: absolute;
+      background: var(--primary);
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: float linear infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+      .logo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .logo {
+        height: 50px;
+      }
+      
+      #toolForm {
+        grid-template-columns: 1fr;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+      
+      th, td {
+        padding: 10px 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating particles background -->
+  <div class="particles" id="particles"></div>
+  
+  <div class="container">
+    <div class="logo-header">
+      <img src="images/logo2.jpg" alt="Inspecta Logo" class="logo">
+      <h1>INSPECTA STORE MANAGER</h1>
+    </div>
+    
+    <a href="index.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <!-- Assign Tool Form -->
+    <form id="toolForm">
+      <div style="position: relative;">
+        <input type="text" id="toolName" placeholder="Tool Name" required oninput="showSuggestions()">
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+      <input type="text" id="toolSerial" placeholder="Serial Number" readonly>
+      <input type="number" id="toolQuantity" placeholder="Quantity" min="1" required>
+      <input type="text" id="technicianName" placeholder="Technician Name" required>
+      <input type="text" id="siteName" placeholder="Site Name" required>
+      <button type="submit"><i class="fas fa-user-tag"></i> Assign Tool</button>
+    </form>
+
+    <!-- Tools Table -->
+    <table id="toolTable">
+      <thead>
+        <tr>
+          <th>Tool Name</th>
+          <th>Serial</th>
+          <th>Quantity</th>
+          <th>Technician</th>
+          <th>Site</th>
+          <th>Issued</th>
+          <th>Returned</th>
+          <th>Status</th>
+          <th>Remarks</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody style="font-size: 12px;">
+        <!-- Tools will be added here dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Create floating particles
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 30;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 5 + 2;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `-${delay}s`;
+        
+        // Random color variation
+        const hue = 180 + Math.random() * 40 - 20;
+        particle.style.background = `hsl(${hue}, 100%, 70%)`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    });
+  </script>
+  
+  <script src="script.js"></script>
+</body>
+</html>
